@@ -1,0 +1,63 @@
+{
+  "groups": [
+    {
+      "name": "clocker",
+      "type": "io.github.yoshikawaa.app.config.ClockerProperties",
+      "sourceType": "io.github.yoshikawaa.app.config.ClockerProperties",
+      "description": "clocker properties"
+    },
+    {
+      "name": "clocker.business",
+      "type": "io.github.yoshikawaa.app.config.ClockerProperties$TimeProperties",
+      "sourceType": "io.github.yoshikawaa.app.config.ClockerProperties",
+      "sourceMethod": "getBusiness()",
+      "description": "clocker business time properties"
+    },
+    {
+      "name": "clocker.interval",
+      "type": "io.github.yoshikawaa.app.config.ClockerProperties$TimeProperties",
+      "sourceType": "io.github.yoshikawaa.app.config.ClockerProperties",
+      "sourceMethod": "getInterval()",
+      "description": "clocker interval time properties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "clocker.business.end",
+      "type": "java.time.LocalTime",
+      "sourceType": "io.github.yoshikawaa.app.config.ClockerProperties$TimeProperties",
+      "description": "end time of business"
+    },
+    {
+      "name": "clocker.business.start",
+      "type": "java.time.LocalTime",
+      "sourceType": "io.github.yoshikawaa.app.config.ClockerProperties$TimeProperties",
+      "description": "start time of business"
+    },
+    {
+      "name": "clocker.holidays-file",
+      "type": "org.springframework.core.io.Resource",
+      "sourceType": "io.github.yoshikawaa.app.config.ClockerProperties",
+      "description": "path to holidays csv file"
+    },
+    {
+      "name": "clocker.interval.end",
+      "type": "java.time.LocalTime",
+      "sourceType": "io.github.yoshikawaa.app.config.ClockerProperties$TimeProperties",
+      "description": "end time of interval"
+    },
+    {
+      "name": "clocker.interval.start",
+      "type": "java.time.LocalTime",
+      "sourceType": "io.github.yoshikawaa.app.config.ClockerProperties$TimeProperties",
+      "description": "start time of interval"
+    },
+    {
+      "name": "clocker.limit-date",
+      "type": "java.time.LocalDate",
+      "sourceType": "io.github.yoshikawaa.app.config.ClockerProperties",
+      "description": "limit date"
+    }
+  ],
+  "hints": []
+}

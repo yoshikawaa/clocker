@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Clocker</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="stylesheet" th:href="@{/css/siimple.min.css}">
+<link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}">
+<link rel="stylesheet" th:href="@{/css/animate.css}">
+<link rel="stylesheet" th:href="@{/css/flipclock.css}">
+<link rel="stylesheet" th:href="@{/css/clocker.css}">
+</head>
+<body>
+    <div class="siimple-content--fluid">
+        <div class="siimple-navbar siimple-navbar--dark siimple-navbar--fluid animated slideInDown">
+            <a class="siimple-navbar-title" th:href="@{/}"><i class="far fa-clock"></i> Clocker</a>
+            <span class="siimple-navbar-subtitle">Count down now!</span>
+        </div>
+        <div class="siimple-content siimple-content--medium">
+            <div class="siimple--text-center">
+                <div class="clock animated fadeIn"></div>
+                <div id="box-prepare" class="siimple-box siimple-box--dark siimple--display-none animated fadeIn">
+                    <div class="siimple-box-title"><i class="fas fa-bed"></i> Preparation Now!</div>
+                </div>
+                <div id="box-business" class="siimple-box siimple-box--primary siimple--display-none animated fadeIn">
+                    <div class="siimple-box-title"><i class="fas fa-edit"></i> Enjoy Development!</div>
+                </div>
+                <div id="box-interval" class="siimple-box siimple-box--success siimple--display-none animated fadeIn">
+                    <div class="siimple-box-title"><i class="fas fa-utensils"></i> Have a Lunch Break!</div>
+                </div>
+                <div id="box-timeout" class="siimple-box siimple-box--error siimple--display-none animated fadeIn">
+                    <div class="siimple-box-title"><i class="fas fa-home"></i> Time to Go Home!</div>
+                </div>
+            </div>
+        </div>
+        <div class="siimple-footer siimple-footer--dark siimple--text-center animated slideInUp">
+            <i class="far fa-copyright"></i> 2018
+            <a class="siimple-link" target="_blank" href="https://github.com/yoshikawaa/clocker">@yoshikawaa</a>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/flipclock.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/moment.min.js}"></script>
+    <script type="text/javascript">
+        // configure environment variables.
+        const businessStart = moment('[[${@environment.getProperty('clocker.business.start')}]]', 'HH:mm');
+        const intervalStart = moment('[[${@environment.getProperty('clocker.interval.start')}]]', 'HH:mm');
+        const intervalEnd = moment('[[${@environment.getProperty('clocker.interval.end')}]]', 'HH:mm');
+        const businessEnd = moment('[[${@environment.getProperty('clocker.business.end')}]]', 'HH:mm');
+
+        // build flipclock.
+        const clock = $('.clock').FlipClock([[${remainingTime}]], {
+               clockFace: 'DailyCounter',
+               countdown: true,
+               autoStart: false,
+               callbacks: {
+                   start: function() {
+                       $('#box-business').removeClass('siimple--display-none');
+                       $('#box-prepare').addClass('siimple--display-none');
+                       $('#box-interval').addClass('siimple--display-none');
+                       $('#box-timeout').addClass('siimple--display-none');
+                   },
+                   interval: function() {
+                       if (moment().isBetween(intervalStart, intervalEnd, 'second')
+                               || moment().isSameOrAfter(businessEnd, 'second')) {
+                               clock.stop();
+                       }
+                   },
+                   stop: function() {
+                       $('#box-business').addClass('siimple--display-none');
+                       if (moment().isSameOrBefore(businessStart, 'second')) {
+                           $('#box-prepare').removeClass('siimple--display-none');
+                       }
+                       if (moment().isBetween(intervalStart, intervalEnd, 'second')) {
+                           $('#box-interval').removeClass('siimple--display-none');
+                       }
+                       if (moment().isSameOrAfter(businessEnd, 'second')) {
+                           $('#box-timeout').removeClass('siimple--display-none');
+                       }
+
+                       const interval = setInterval(function() {
+                           if (moment().isBetween(businessStart, intervalStart, 'second')
+                                   || moment().isBetween(intervalEnd, businessEnd, 'second')) {
+                               clearInterval(interval);
+                               clock.start();
+                           }
+                       }, 1000);
+                   }
+               }
+        });
+        
+        // activate flipclock.
+        if (moment().isBetween(businessStart, intervalStart, 'second')
+                || moment().isBetween(intervalEnd, businessEnd, 'second')) {
+            clock.start();
+        } else {
+            clock.stop();
+        }
+    </script>
+</body>
+</html>

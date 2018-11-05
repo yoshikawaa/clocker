@@ -1,0 +1,16 @@
+server:
+  port: 9999
+  servlet:
+    context-path: /clocker
+spring:
+  thymeleaf:
+    cache: false
+clocker:
+  holidays-file: classpath:syukujitsu_kyujitsu.csv
+  limit-date: "2018-11-30"
+  business:
+    start: "09:00"
+    end : "17:30"
+  interval:
+    start: "12:00"
+    end : "13:00"
